@@ -87,33 +87,6 @@ Organizations:
             # encoded in the genesis block in the Application section context
             - Host: peer0.org2.example.com
               Port: 7051
-    - &Org3
-        # Name of the organization
-        Name: Org3MSP
-        # ID to load the MSP definition as
-        ID: Org3MSP
-        # Type of MSP - this org uses idemix for its MSP implementation
-        MSPType: idemix
-        MSPDir: crypto-config/idemix/idemix-config
-        # Policies defines the set of policies at this level of the config tree
-        # For organization policies, their canonical path is usually
-        #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-        Policies:
-            Readers:
-                Type: Signature
-                Rule: "OR('Org3MSP.admin', 'Org3MSP.peer', 'Org3MSP.client')"
-            Writers:
-                Type: Signature
-                Rule: "OR('Org3MSP.admin', 'Org3MSP.client')"
-            Admins:
-                Type: Signature
-                Rule: "OR('Org3MSP.admin')"
-        AnchorPeers:
-            # AnchorPeers defines the location of peers which can be used
-            # for cross org gossip communication.  Note, this value is only
-            # encoded in the genesis block in the Application section context
-            - Host: peer0.org3.example.com
-              Port: 7051
 ################################################################################
 #
 #   SECTION: Capabilities
@@ -213,9 +186,9 @@ Orderer: &OrdererDefaults
     # Available types are "solo" and "kafka"
     OrdererType: etcdraft
     Addresses:
-        - orderer0.example.com:7050
-        - orderer1.example.com:7050
-        - orderer2.example.com:7050
+        - orderer0:7050
+        - orderer1:7050
+        - orderer2:7050
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 100ms
     # Batch Size: Controls the number of messages batched into a block
@@ -336,15 +309,15 @@ Profiles:
             OrdererType: etcdraft
             EtcdRaft:
                 Consenters:
-                    - Host: orderer0.example.com
+                    - Host: orderer0
                       Port: 7050
                       ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
                       ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
-                    - Host: orderer1.example.com
+                    - Host: orderer1
                       Port: 7050
                       ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
                       ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
-                    - Host: orderer2.example.com
+                    - Host: orderer2
                       Port: 7050
                       ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
                       ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
@@ -355,7 +328,6 @@ Profiles:
                 Organizations:
                     - *Org1
                     - *Org2
-
     TwoOrgsChannel:
         Consortium: SampleConsortium
         Application:
